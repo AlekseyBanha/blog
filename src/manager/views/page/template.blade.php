@@ -38,15 +38,44 @@
                 var checkContainer = document.getElementById('assigned-blade-file'),
                     filenameLabel = document.getElementById('blade-filename'),
                     alias = document.getElementById('templatealias'),
+                    templatename = document.getElementsByName('templatename')[0],
                     check = document.getElementById('createbladefile');
 
-                var updateFilename = function(value) {
-                    var filename = value;
-                    filename = filename.replace(/\s*/g, '');
-                    filename = filename.replace(/[^a-zA-Z0-9_-]+/g, '');
+                var normalizeAlias = function(value) {
+                    var filename = (value || '').trim().toLowerCase();
+                    filename = filename.replace(/[^\.a-z0-9 _-]+/g, '');
+                    filename = filename.replace(/\s+/g, '-');
+                    filename = filename.replace(/-+/g, '-');
+                    filename = filename.replace(/^-+|-+$/g, '');
+                    return filename;
+                };
 
-                    if (filename == value && filename != '') {
-                        filenameLabel.innerText = '/views/' + filename + '.blade.php';
+                var bladePathFromAlias = function(value) {
+                    var parts = value.split('.');
+                    var safe = [];
+                    for (var i = 0; i < parts.length; i++) {
+                        var part = parts[i].replace(/[^a-zA-Z0-9_-]+/g, '');
+                        if (!part) {
+                            return '';
+                        }
+                        safe.push(part);
+                    }
+                    if (safe.join('.') !== value) {
+                        return '';
+                    }
+                    return '/views/' + safe.join('/') + '.blade.php';
+                };
+
+                var updateFilename = function() {
+                    var source = (alias.value || '').trim();
+                    if (!source && templatename) {
+                        source = (templatename.value || '').trim();
+                    }
+                    var filename = normalizeAlias(source);
+                    var path = bladePathFromAlias(filename);
+
+                    if (path) {
+                        filenameLabel.innerText = path;
                         checkContainer.style.display = 'block';
                         check.disabled = false;
                     } else {
@@ -55,15 +84,14 @@
                     }
                 };
 
-                alias.addEventListener('change', function(event) {
-                    updateFilename(this.value);
-                });
+                alias.addEventListener('change', updateFilename);
+                alias.addEventListener('input', updateFilename);
+                if (templatename) {
+                    templatename.addEventListener('change', updateFilename);
+                    templatename.addEventListener('input', updateFilename);
+                }
 
-                alias.addEventListener('input', function(event) {
-                    updateFilename(this.value);
-                });
-
-                updateFilename(alias.value);
+                updateFilename();
             });
 
         </script>
@@ -170,12 +198,13 @@
                     <div class="form-group" id="assigned-blade-file" style="display: none;">
                         {{ ManagerTheme::getLexicon('template_assigned_blade_file') }}: <strong id="blade-filename"></strong>
 
-                        <div class="create-check" style="display: hidden;">
+                        <div class="create-check">
                             <label>
                                 @include('manager::form.inputElement', [
                                     'name' => 'createbladefile',
                                     'id' => 'createbladefile',
                                     'type' => 'checkbox',
+                                    'value' => '1',
                                     'checked' => false,
                                     'attributes' => 'onchange="documentDirty=true;"'
                                 ])

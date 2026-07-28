@@ -1,5 +1,124 @@
 <?php
-$c=&$this->config;$c['a']="30";$c['aliaslistingfolder']="0";$c['allow_duplicate_alias']="0";$c['allow_eval']="with_scan";$c['allow_multiple_emails']="0";$c['auto_menuindex']="1";$c['auto_template_logic']="sibling";$c['automatic_alias']="1";$c['blocked_minutes']="60";$c['cache_default']="1";$c['cache_type']="2";$c['captcha_words']="EVO,Access,Better,BitCode,Chunk,Cache,Desc,Design,Excell,Enjoy,URLs,TechView,Gerald,Griff,Humphrey,Holiday,Intel,Integration,Joystick,Join(),Oscope,Genetic,Light,Likeness,Marit,Maaike,Niche,Netherlands,Ordinance,Oscillo,Parser,Phusion,Query,Question,Regalia,Righteous,Snippet,Sentinel,Template,Thespian,Unity,Enterprise,Verily,Tattoo,Veri,Website,WideWeb,Yap,Yellow,Zebra,Zygote";$c['captcha_words_default']="EVO,Access,Better,BitCode,Chunk,Cache,Desc,Design,Excell,Enjoy,URLs,TechView,Gerald,Griff,Humphrey,Holiday,Intel,Integration,Joystick,Join(),Oscope,Genetic,Light,Likeness,Marit,Maaike,Niche,Netherlands,Ordinance,Oscillo,Parser,Phusion,Query,Question,Regalia,Righteous,Snippet,Sentinel,Template,Thespian,Unity,Enterprise,Verily,Tattoo,Veri,Website,WideWeb,Yap,Yellow,Zebra,Zygote";$c['check_files_onlogin']="index.php\r\n.htaccess\r\nmanager/index.php\r\n/core/config/database/connections/default.php";$c['chunk_processor']="DLTemplate";$c['clean_uploaded_filename']="1";$c['clientResize']="0";$c['ControllerNamespace']="";$c['custom_contenttype']="text/html,application/rss+xml,application/pdf,application/vnd.ms-word,application/vnd.ms-excel,text/css,text/xml,text/javascript,text/plain,application/json";$c['datepicker_offset']="-10";$c['datetime_format']="dd-mm-YYYY";$c['default_template']="1";$c['denyExtensionRename']="0";$c['denyZipDownload']="0";$c['disable_chunk_cache']="0";$c['disable_plugins_cache']="0";$c['disable_snippet_cache']="0";$c['docid_incrmnt_method']="0";$c['editor_css_path']="";$c['editor_css_selectors']="";$c['email_method']="mail";$c['email_sender_method']="1";$c['emailsender']="alekseybanga2001@gmail.com";$c['emailsubject']="Данные для авторизации";$c['emailsubject_default']="Данные для авторизации";$c['enable_bindings']="1";$c['enable_cache']="1";$c['error_page']="1";$c['error_reporting']="1";$c['failed_login_attempts']="3";$c['fck_editor_autolang']="0";$c['fck_editor_toolbar']="standard";$c['fe_editor_lang']="ru";$c['filemanager_path']="[(base_path)]";$c['friendly_alias_urls']="1";$c['friendly_url_prefix']="";$c['friendly_url_suffix']="/";$c['friendly_urls']="1";$c['full_aliaslisting']="0";$c['global_tabs']="1";$c['group_tvs']="0";$c['html_comment']="";$c['jpegQuality']="90";$c['lang_code']="ru";$c['login_bg']="";$c['login_form_position']="left";$c['login_form_style']="dark";$c['login_logo']="";$c['make_folders']="0";$c['manager_direction']="ltr";$c['manager_language']="ru";$c['manager_layout']="4";$c['manager_menu_position']="top";$c['manager_theme']="default";$c['manager_theme_mode']="3";$c['maxImageHeight']="2200";$c['maxImageWidth']="2600";$c['minifyphp_incache']="0";$c['modx_charset']="UTF-8";$c['new_file_permissions']="0644";$c['new_folder_permissions']="0755";$c['noThumbnailsRecreation']="0";$c['number_of_logs']="100";$c['number_of_results']="30";$c['old_template']="0";$c['publish_default']="1";$c['rb_base_dir']="[(base_path)]assets/";$c['rb_base_url']="assets/";$c['rb_webuser']="0";$c['reload_captcha_words']="";$c['reload_emailsubject']="";$c['reload_site_unavailable']="";$c['reload_system_email_webreminder_message']="";$c['reload_websignupemail_message']="";$c['remember_last_tab']="1";$c['resource_tree_node_name']="pagetitle";$c['rss_url_extras']="https://evo.im/rss/extras.xml";$c['rss_url_releases']="https://evo.im/rss/releases.xml";$c['safe_functions_at_eval']="time,date,strtotime,strftime";$c['search_default']="1";$c['send_errormail']="0";$c['seostrict']="1";$c['server_offset_time']="0";$c['server_protocol']="http";$c['session_timeout']="15";$c['session.cookie.lifetime']="604800";$c['settings_version']="3.5.8";$c['show_fullscreen_btn']="0";$c['show_newresource_btn']="0";$c['show_picker']="0";$c['showHiddenFiles']="0";$c['site_id']="6a686f2737b26";$c['site_name']="Blog";$c['site_start']="1";$c['site_status']="1";$c['site_timezone']="UTC";$c['site_unavailable_message']="В настоящее время сайт недоступен.";$c['site_unavailable_page']="";$c['siteunavailable_message_default']="ru";$c['smtp_auth']="0";$c['smtp_autotls']="0";$c['smtp_host']="smtp.example.com";$c['smtp_port']="25";$c['smtp_secure']="none";$c['smtp_username']="emailsender";$c['stay']="2";$c['strip_image_paths']="1";$c['sys_files_checksum']="a:4:{s:23:\"/var/www/html/index.php\";s:32:\"e845a31b74e249d433dc36badedfae29\";s:23:\"/var/www/html/.htaccess\";s:32:\"36f8744c70b08bd1872fbb0e8e06a1ea\";s:31:\"/var/www/html/manager/index.php\";s:32:\"ab14a72c71f97945e6d90792a950c4a5\";s:59:\"/var/www/html//core/config/database/connections/default.php\";s:32:\"cff00044e7ed1b559616779dd325cd01\";}";$c['system_email_webreminder_default']="Здравствуйте, [+uid+]!\r\n\r\nЧтобы активировать ваш новый пароль, перейдите по следующей ссылке:\r\n\r\n[+surl+]\r\n\r\nПозже вы сможете использовать следующий пароль для авторизации: [+pwd+]\r\n\r\nЕсли это письмо пришло к вам по ошибке, пожалуйста, проигнорируйте его.\r\n\r\nС уважением, Администрация";$c['system_email_websignup_default']="Здравствуйте, [+uid+]!\r\n\r\nВаши данные для авторизации на [+sname+]:\r\n\r\nИмя пользователя: [+uid+]\r\nПароль: [+pwd+]\r\n\r\nПосле успешной авторизации на [+sname+] ([+surl+]), вы сможете изменить свой пароль.\r\n\r\nС уважением, Администрация";$c['theme_refresher']="";$c['thumbHeight']="150";$c['thumbsDir']=".thumbs";$c['thumbWidth']="150";$c['track_visitors']="0";$c['tree_page_click']="27";$c['tree_show_protected']="0";$c['udperms_allowroot']="0";$c['unauthorized_page']="1";$c['UpgradeRepository']="";$c['upload_files']="bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff,fla,flv,swf,aac,au,avi,css,cache,doc,docx,gz,gzip,htaccess,htm,html,js,mp3,mp4,mpeg,mpg,ods,odp,odt,pdf,ppt,pptx,rar,tar,tgz,txt,wav,wmv,xls,xlsx,xml,z,zip,JPG,JPEG,PNG,GIF,svg,tpl,webp,avif";$c['upload_images']="bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff,svg,webp,avif";$c['upload_maxsize']="10485760";$c['upload_media']="au,avi,mp3,mp4,mpeg,mpg,wav,wmv";$c['use_alias_path']="1";$c['use_breadcrumbs']="0";$c['use_browser']="1";$c['use_captcha']="0";$c['use_editor']="1";$c['use_udperms']="1";$c['validate_referer']="1";$c['warning_visibility']="0";$c['webpwdreminder_message']="Здравствуйте, [+uid+]!\r\n\r\nЧтобы активировать ваш новый пароль, перейдите по следующей ссылке:\r\n\r\n[+surl+]\r\n\r\nПозже вы сможете использовать следующий пароль для авторизации: [+pwd+]\r\n\r\nЕсли это письмо пришло к вам по ошибке, пожалуйста, проигнорируйте его.\r\n\r\nС уважением, Администрация";$c['websignupemail_message']="Здравствуйте, [+uid+]!\r\n\r\nВаши данные для авторизации на [+sname+]:\r\n\r\nИмя пользователя: [+uid+]\r\nПароль: [+pwd+]\r\n\r\nПосле успешной авторизации на [+sname+] ([+surl+]), вы сможете изменить свой пароль.\r\n\r\nС уважением, Администрация";$c['which_browser']="mcpuk";$c['which_editor']="none";$c['xhtml_urls']="0";$this->aliasListing=array();$a=&$this->aliasListing;$d=&$this->documentListing;$m=&$this->documentMap;$a[1]=array('id'=>1,'alias'=>'minimal-base','path'=>'','parent'=>0,'isfolder'=>0,'alias_visible'=>1);$d['minimal-base']=1;$m[]=array(0=>1);$c=&$this->contentTypes;$c=&$this->chunkCache;$s=&$this->snippetCache;$p=&$this->pluginCache;$p['CodeMirror']='/**
+$c=&$this->config;$c['a']="30";$c['aliaslistingfolder']="0";$c['allow_duplicate_alias']="0";$c['allow_eval']="with_scan";$c['allow_multiple_emails']="0";$c['auto_menuindex']="1";$c['auto_template_logic']="sibling";$c['automatic_alias']="1";$c['blocked_minutes']="60";$c['cache_default']="1";$c['cache_type']="2";$c['captcha_words']="EVO,Access,Better,BitCode,Chunk,Cache,Desc,Design,Excell,Enjoy,URLs,TechView,Gerald,Griff,Humphrey,Holiday,Intel,Integration,Joystick,Join(),Oscope,Genetic,Light,Likeness,Marit,Maaike,Niche,Netherlands,Ordinance,Oscillo,Parser,Phusion,Query,Question,Regalia,Righteous,Snippet,Sentinel,Template,Thespian,Unity,Enterprise,Verily,Tattoo,Veri,Website,WideWeb,Yap,Yellow,Zebra,Zygote";$c['captcha_words_default']="EVO,Access,Better,BitCode,Chunk,Cache,Desc,Design,Excell,Enjoy,URLs,TechView,Gerald,Griff,Humphrey,Holiday,Intel,Integration,Joystick,Join(),Oscope,Genetic,Light,Likeness,Marit,Maaike,Niche,Netherlands,Ordinance,Oscillo,Parser,Phusion,Query,Question,Regalia,Righteous,Snippet,Sentinel,Template,Thespian,Unity,Enterprise,Verily,Tattoo,Veri,Website,WideWeb,Yap,Yellow,Zebra,Zygote";$c['check_files_onlogin']="index.php\r\n.htaccess\r\nmanager/index.php\r\n/core/config/database/connections/default.php";$c['chunk_processor']="DLTemplate";$c['clean_uploaded_filename']="1";$c['clientResize']="0";$c['ControllerNamespace']="";$c['custom_contenttype']="text/html,application/rss+xml,application/pdf,application/vnd.ms-word,application/vnd.ms-excel,text/css,text/xml,text/javascript,text/plain,application/json";$c['datepicker_offset']="-10";$c['datetime_format']="dd-mm-YYYY";$c['default_template']="1";$c['denyExtensionRename']="0";$c['denyZipDownload']="0";$c['disable_chunk_cache']="0";$c['disable_plugins_cache']="0";$c['disable_snippet_cache']="0";$c['docid_incrmnt_method']="0";$c['editor_css_path']="";$c['editor_css_selectors']="";$c['email_method']="mail";$c['email_sender_method']="1";$c['emailsender']="alekseybanga2001@gmail.com";$c['emailsubject']="Данные для авторизации";$c['emailsubject_default']="Данные для авторизации";$c['enable_bindings']="1";$c['enable_cache']="1";$c['error_page']="1";$c['error_reporting']="1";$c['failed_login_attempts']="3";$c['fck_editor_autolang']="0";$c['fck_editor_toolbar']="standard";$c['fe_editor_lang']="ru";$c['filemanager_path']="[(base_path)]";$c['friendly_alias_urls']="1";$c['friendly_url_prefix']="";$c['friendly_url_suffix']="/";$c['friendly_urls']="1";$c['full_aliaslisting']="0";$c['global_tabs']="1";$c['group_tvs']="0";$c['html_comment']="";$c['jpegQuality']="90";$c['lang_code']="ru";$c['login_bg']="";$c['login_form_position']="left";$c['login_form_style']="dark";$c['login_logo']="";$c['make_folders']="0";$c['manager_direction']="ltr";$c['manager_language']="ru";$c['manager_layout']="4";$c['manager_menu_position']="top";$c['manager_theme']="default";$c['manager_theme_mode']="3";$c['maxImageHeight']="2200";$c['maxImageWidth']="2600";$c['minifyphp_incache']="0";$c['modx_charset']="UTF-8";$c['new_file_permissions']="0644";$c['new_folder_permissions']="0755";$c['noThumbnailsRecreation']="0";$c['number_of_logs']="100";$c['number_of_results']="30";$c['old_template']="0";$c['publish_default']="1";$c['rb_base_dir']="[(base_path)]assets/";$c['rb_base_url']="assets/";$c['rb_webuser']="0";$c['reload_captcha_words']="";$c['reload_emailsubject']="";$c['reload_site_unavailable']="";$c['reload_system_email_webreminder_message']="";$c['reload_websignupemail_message']="";$c['remember_last_tab']="1";$c['resource_tree_node_name']="pagetitle";$c['rss_url_extras']="https://evo.im/rss/extras.xml";$c['rss_url_releases']="https://evo.im/rss/releases.xml";$c['safe_functions_at_eval']="time,date,strtotime,strftime";$c['search_default']="1";$c['send_errormail']="0";$c['seostrict']="1";$c['server_offset_time']="0";$c['server_protocol']="http";$c['session_timeout']="15";$c['session.cookie.lifetime']="604800";$c['settings_version']="3.5.8";$c['show_fullscreen_btn']="0";$c['show_newresource_btn']="0";$c['show_picker']="0";$c['showHiddenFiles']="0";$c['site_id']="6a686f2737b26";$c['site_name']="Blog";$c['site_start']="2";$c['site_status']="1";$c['site_timezone']="UTC";$c['site_unavailable_message']="В настоящее время сайт недоступен.";$c['site_unavailable_page']="";$c['siteunavailable_message_default']="ru";$c['smtp_auth']="0";$c['smtp_autotls']="0";$c['smtp_host']="smtp.example.com";$c['smtp_port']="25";$c['smtp_secure']="none";$c['smtp_username']="emailsender";$c['stay']="2";$c['strip_image_paths']="1";$c['sys_files_checksum']="a:4:{s:23:\"/var/www/html/index.php\";s:32:\"e845a31b74e249d433dc36badedfae29\";s:23:\"/var/www/html/.htaccess\";s:32:\"36f8744c70b08bd1872fbb0e8e06a1ea\";s:31:\"/var/www/html/manager/index.php\";s:32:\"ab14a72c71f97945e6d90792a950c4a5\";s:59:\"/var/www/html//core/config/database/connections/default.php\";s:32:\"cff00044e7ed1b559616779dd325cd01\";}";$c['system_email_webreminder_default']="Здравствуйте, [+uid+]!\r\n\r\nЧтобы активировать ваш новый пароль, перейдите по следующей ссылке:\r\n\r\n[+surl+]\r\n\r\nПозже вы сможете использовать следующий пароль для авторизации: [+pwd+]\r\n\r\nЕсли это письмо пришло к вам по ошибке, пожалуйста, проигнорируйте его.\r\n\r\nС уважением, Администрация";$c['system_email_websignup_default']="Здравствуйте, [+uid+]!\r\n\r\nВаши данные для авторизации на [+sname+]:\r\n\r\nИмя пользователя: [+uid+]\r\nПароль: [+pwd+]\r\n\r\nПосле успешной авторизации на [+sname+] ([+surl+]), вы сможете изменить свой пароль.\r\n\r\nС уважением, Администрация";$c['theme_refresher']="";$c['thumbHeight']="150";$c['thumbsDir']=".thumbs";$c['thumbWidth']="150";$c['track_visitors']="0";$c['tree_page_click']="27";$c['tree_show_protected']="0";$c['udperms_allowroot']="0";$c['unauthorized_page']="1";$c['UpgradeRepository']="";$c['upload_files']="bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff,fla,flv,swf,aac,au,avi,css,cache,doc,docx,gz,gzip,htaccess,htm,html,js,mp3,mp4,mpeg,mpg,ods,odp,odt,pdf,ppt,pptx,rar,tar,tgz,txt,wav,wmv,xls,xlsx,xml,z,zip,JPG,JPEG,PNG,GIF,svg,tpl,webp,avif";$c['upload_images']="bmp,ico,gif,jpeg,jpg,png,psd,tif,tiff,svg,webp,avif";$c['upload_maxsize']="10485760";$c['upload_media']="au,avi,mp3,mp4,mpeg,mpg,wav,wmv";$c['use_alias_path']="1";$c['use_breadcrumbs']="0";$c['use_browser']="1";$c['use_captcha']="0";$c['use_editor']="1";$c['use_udperms']="1";$c['validate_referer']="1";$c['warning_visibility']="0";$c['webpwdreminder_message']="Здравствуйте, [+uid+]!\r\n\r\nЧтобы активировать ваш новый пароль, перейдите по следующей ссылке:\r\n\r\n[+surl+]\r\n\r\nПозже вы сможете использовать следующий пароль для авторизации: [+pwd+]\r\n\r\nЕсли это письмо пришло к вам по ошибке, пожалуйста, проигнорируйте его.\r\n\r\nС уважением, Администрация";$c['websignupemail_message']="Здравствуйте, [+uid+]!\r\n\r\nВаши данные для авторизации на [+sname+]:\r\n\r\nИмя пользователя: [+uid+]\r\nПароль: [+pwd+]\r\n\r\nПосле успешной авторизации на [+sname+] ([+surl+]), вы сможете изменить свой пароль.\r\n\r\nС уважением, Администрация";$c['which_browser']="mcpuk";$c['which_editor']="none";$c['xhtml_urls']="0";$this->aliasListing=array();$a=&$this->aliasListing;$d=&$this->documentListing;$m=&$this->documentMap;$a[5]=array('id'=>5,'alias'=>'blog','path'=>'','parent'=>0,'isfolder'=>1,'alias_visible'=>1);$d['blog']=5;$m[]=array(0=>5);$a[1]=array('id'=>1,'alias'=>'minimal-base','path'=>'','parent'=>0,'isfolder'=>0,'alias_visible'=>1);$d['minimal-base']=1;$m[]=array(0=>1);$a[6]=array('id'=>6,'alias'=>'etiam-id-diam-vitae-lorem-dictum','path'=>'blog','parent'=>5,'isfolder'=>0,'alias_visible'=>1);$d['blog/etiam-id-diam-vitae-lorem-dictum']=6;$m[]=array(5=>6);$a[7]=array('id'=>7,'alias'=>'donec-tincidunt-leo-nec-magna','path'=>'blog','parent'=>5,'isfolder'=>0,'alias_visible'=>1);$d['blog/donec-tincidunt-leo-nec-magna']=7;$m[]=array(5=>7);$a[8]=array('id'=>8,'alias'=>'swag-hella-echo-park-leggings-shaman-cornhole-ethical-coloring','path'=>'blog','parent'=>5,'isfolder'=>0,'alias_visible'=>1);$d['blog/swag-hella-echo-park-leggings-shaman-cornhole-ethical-coloring']=8;$m[]=array(5=>8);$a[9]=array('id'=>9,'alias'=>'vestibulum-id-turpis-porttitor-sapien-facilisis-scelerisque','path'=>'blog','parent'=>5,'isfolder'=>0,'alias_visible'=>1);$d['blog/vestibulum-id-turpis-porttitor-sapien-facilisis-scelerisque']=9;$m[]=array(5=>9);$a[10]=array('id'=>10,'alias'=>'suspendisse-et-metus-nec-libero-ultrices-varius-eget-in-risus','path'=>'blog','parent'=>5,'isfolder'=>0,'alias_visible'=>1);$d['blog/suspendisse-et-metus-nec-libero-ultrices-varius-eget-in-risus']=10;$m[]=array(5=>10);$c=&$this->contentTypes;$c=&$this->chunkCache;$c['blog_header']='<header class="">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand" href="index.html"><h2>Stand Blog<em>.</em></h2></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="index.html">Home
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="blog.html">Blog Entries</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="post-details.html">Post Details</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contact.html">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>';$c['blog_footer']='<footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="social-icons">
+              <li><a href="#">Facebook</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Behance</a></li>
+              <li><a href="#">Linkedin</a></li>
+              <li><a href="#">Dribbble</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-12">
+            <div class="copyright-text">
+              <p>Copyright 2020 Stand Blog Co.
+                    
+                 | Design: <a rel="nofollow" href="https://templatemo.com" target="_parent">TemplateMo</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>';$c['blog_sidebar']='<div class="sidebar">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="sidebar-item search">
+                    <form id="search_form" name="gs" method="GET" action="#">
+                      <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
+                    </form>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="sidebar-item recent-posts">
+                    <div class="sidebar-heading">
+                      <h2>Recent Posts</h2>
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li><a href="post-details.html">
+                          <h5>Vestibulum id turpis porttitor sapien facilisis scelerisque</h5>
+                          <span>May 31, 2020</span>
+                        </a></li>
+                        <li><a href="post-details.html">
+                          <h5>Suspendisse et metus nec libero ultrices varius eget in risus</h5>
+                          <span>May 28, 2020</span>
+                        </a></li>
+                        <li><a href="post-details.html">
+                          <h5>Swag hella echo park leggings, shaman cornhole ethical coloring</h5>
+                          <span>May 14, 2020</span>
+                        </a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="sidebar-item categories">
+                    <div class="sidebar-heading">
+                      <h2>Categories</h2>
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li><a href="#">- Nature Lifestyle</a></li>
+                        <li><a href="#">- Awesome Layouts</a></li>
+                        <li><a href="#">- Creative Ideas</a></li>
+                        <li><a href="#">- Responsive Templates</a></li>
+                        <li><a href="#">- HTML5 / CSS3 Templates</a></li>
+                        <li><a href="#">- Creative &amp; Unique</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="sidebar-item tags">
+                    <div class="sidebar-heading">
+                      <h2>Tag Clouds</h2>
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li><a href="#">Lifestyle</a></li>
+                        <li><a href="#">Creative</a></li>
+                        <li><a href="#">HTML5</a></li>
+                        <li><a href="#">Inspiration</a></li>
+                        <li><a href="#">Motivation</a></li>
+                        <li><a href="#">PSD</a></li>
+                        <li><a href="#">Responsive</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>';$s=&$this->snippetCache;$p=&$this->pluginCache;$p['CodeMirror']='/**
  * CodeMirror
  *
  * JavaScript library that can be used to create a relatively pleasant editor interface based on CodeMirror 5.33 (released on 21-12-2017)

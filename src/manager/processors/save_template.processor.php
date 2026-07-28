@@ -33,26 +33,54 @@ if ($templatename == "") {
     $templatename = "Untitled template";
 }
 
-function createBladeFile($templatealias)
+function createBladeFile($templatealias, $content = '')
 {
-    $filename = $templatealias;
-    $filename = preg_replace('/\s*/', '', $filename);
-    $filename = preg_replace('/[^a-zA-Z0-9_-]+/', '', $filename);
-
-    if (!empty($filename) && $filename == $templatealias) {
-        $filename .= '.blade.php';
-        $views = EVO_BASE_PATH . 'views';
-
-        if (!file_exists($views . '/' . $filename)) {
-            if (!is_dir($views)) {
-                mkdir($views);
-            }
-
-            if (is_writeable($views)) {
-                file_put_contents($views . '/' . $filename, '');
-            }
-        }
+    $alias = trim((string)$templatealias);
+    if ($alias === '') {
+        return false;
     }
+
+    // Blade view names use dots as directory separators (blog.post → views/blog/post.blade.php)
+    $parts = explode('.', $alias);
+    $safeParts = [];
+    foreach ($parts as $part) {
+        $part = preg_replace('/\s+/', '', $part);
+        $part = preg_replace('/[^a-zA-Z0-9_-]+/', '', $part);
+        if ($part === '') {
+            return false;
+        }
+        $safeParts[] = $part;
+    }
+
+    if (implode('.', $safeParts) !== $alias) {
+        return false;
+    }
+
+    $views = rtrim(EVO_BASE_PATH, '/\\') . DIRECTORY_SEPARATOR . 'views';
+    if (!is_dir($views) && !mkdir($views, 0777, true) && !is_dir($views)) {
+        return false;
+    }
+    @chmod($views, 0777);
+
+    if (count($safeParts) > 1) {
+        $relativeDir = implode(DIRECTORY_SEPARATOR, array_slice($safeParts, 0, -1));
+        $targetDir = $views . DIRECTORY_SEPARATOR . $relativeDir;
+        if (!is_dir($targetDir) && !mkdir($targetDir, 0777, true) && !is_dir($targetDir)) {
+            return false;
+        }
+        @chmod($targetDir, 0777);
+    } else {
+        $targetDir = $views;
+    }
+
+    if (!is_writable($targetDir)) {
+        return false;
+    }
+
+    $filename = end($safeParts) . '.blade.php';
+    $path = $targetDir . DIRECTORY_SEPARATOR . $filename;
+
+    return file_put_contents($path, (string)$content) !== false;
 }
 
 switch ($_POST['mode']) {
@@ -103,7 +131,7 @@ switch ($_POST['mode']) {
         saveTemplateAccess($newid);
 
         if (!empty($_POST['createbladefile'])) {
-            createBladeFile($templatealias);
+            createBladeFile($templatealias, $template);
         }
 
         // Set the item name for logger
@@ -163,7 +191,7 @@ switch ($_POST['mode']) {
         saveTemplateAccess($id);
 
         if (!empty($_POST['createbladefile'])) {
-            createBladeFile($templatealias);
+            createBladeFile($templatealias, $template);
         }
 
         // invoke OnTempFormSave event

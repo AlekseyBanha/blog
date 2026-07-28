@@ -7,20 +7,27 @@ EVO_VERSION="${EVO_VERSION:-3.5.x-dev}"
 fix_permissions() {
   mkdir -p "${APP_DIR}/assets/cache/rss"
   mkdir -p "${APP_DIR}/core/config/database/connections"
-  mkdir -p "${APP_DIR}/core/storage"
+  mkdir -p "${APP_DIR}/core/storage/logs"
+  mkdir -p "${APP_DIR}/core/storage/sessions"
+  mkdir -p "${APP_DIR}/core/storage/cache"
+  mkdir -p "${APP_DIR}/core/storage/blade"
+  mkdir -p "${APP_DIR}/core/storage/bootstrap"
+  mkdir -p "${APP_DIR}/views"
 
   # Make installer/runtime paths writable for php-fpm user.
   chown -R www-data:www-data \
     "${APP_DIR}/assets" \
     "${APP_DIR}/install" \
+    "${APP_DIR}/views" \
     "${APP_DIR}/core/config/database/connections" \
     "${APP_DIR}/core/storage" 2>/dev/null || true
   chmod -R ug+rwX \
     "${APP_DIR}/assets" \
     "${APP_DIR}/install" \
+    "${APP_DIR}/views" \
     "${APP_DIR}/core/config/database/connections" \
     "${APP_DIR}/core/storage" 2>/dev/null || true
-  chmod -R 0777 "${APP_DIR}/assets/cache" 2>/dev/null || true
+  chmod -R 0777 "${APP_DIR}/assets/cache" "${APP_DIR}/views" 2>/dev/null || true
 }
 
 if [ ! -f "${APP_DIR}/composer.json" ]; then
