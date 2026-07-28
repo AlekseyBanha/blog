@@ -1,7 +1,8 @@
 {
     "name": "evolutioncms/custom",
     "require": {
-        "evolution-cms-extras/tinymce5": "dev-master"
+        "evolution-cms-extras/tinymce5": "dev-master",
+        "evolution-cms-extras/doclister": "*"
     },
     "autoload": {
         "psr-4": {

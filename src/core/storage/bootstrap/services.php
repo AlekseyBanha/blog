@@ -45,6 +45,7 @@
     'Fix_Fs' => 'EvolutionCMS\\Providers\\FsServiceProvider',
     'Blade_Icons' => 'EvolutionCMS\\Providers\\BladeIconsAdapterServiceProvider',
     'Blade_Tabler' => 'secondnetwork\\TablerIcons\\BladeTablerIconsServiceProvider',
+    'DocListerServiceProvider' => 'EvolutionCMS\\DocLister\\DocListerServiceProvider',
     'MainServiceProvider' => 'EvolutionCMS\\Main\\MainServiceProvider',
     'TinyMCE5ServiceProvider' => 'EvolutionCMS\\TinyMCE5\\TinyMCE5ServiceProvider',
   ),
@@ -89,8 +90,9 @@
     36 => 'EvolutionCMS\\Providers\\FsServiceProvider',
     37 => 'EvolutionCMS\\Providers\\BladeIconsAdapterServiceProvider',
     38 => 'secondnetwork\\TablerIcons\\BladeTablerIconsServiceProvider',
-    39 => 'EvolutionCMS\\Main\\MainServiceProvider',
-    40 => 'EvolutionCMS\\TinyMCE5\\TinyMCE5ServiceProvider',
+    39 => 'EvolutionCMS\\DocLister\\DocListerServiceProvider',
+    40 => 'EvolutionCMS\\Main\\MainServiceProvider',
+    41 => 'EvolutionCMS\\TinyMCE5\\TinyMCE5ServiceProvider',
   ),
   'deferred' => 
   array (

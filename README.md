@@ -143,3 +143,21 @@ docker compose logs -f db
 
 - РџСЂРѕР±Р»РµРјРё Р· collation  
   РЈ РїСЂРѕС”РєС‚С– РІР¶Рµ РІСЃС‚Р°РЅРѕРІР»РµРЅРѕ MySQL collation `utf8mb4_unicode_ci` Сѓ `docker-compose.yml`.
+## 8) Тема Stand Blog
+
+Фронтенд зібрано на Blade + контролери (`core/custom/packages/main`) за принципами Evolution CMS 3:
+
+- Шаблони: `Home`, `Blog`, `Post`, `Page` (aliases: `home`, `blog`, `post_details`, `page`)
+- Вьюхи: `src/views/*.blade.php` + `partials/`
+- TV постів: `image`, `category`, `tags`
+- Дерево: Home / About / Blog (пости) / Contact
+- Ассети: `/css`, `/js`, `/images`, `/fonts`
+
+Повторна установка даних теми:
+
+```bash
+docker compose exec app php core/custom/packages/main/setup-blog.php
+docker compose exec app php core/artisan cache:clear-full
+```
+
+Сайт: http://localhost:8080/

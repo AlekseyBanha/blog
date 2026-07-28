@@ -1319,6 +1319,57 @@
             "time": "2025-03-06T22:45:56+00:00"
         },
         {
+            "name": "evolution-cms-extras/doclister",
+            "version": "2.5.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evolution-cms-extras/DocLister.git",
+                "reference": "1e8cba23b435edbc64dd80b24c9b796f806ff15a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/evolution-cms-extras/DocLister/zipball/1e8cba23b435edbc64dd80b24c9b796f806ff15a",
+                "reference": "1e8cba23b435edbc64dd80b24c9b796f806ff15a",
+                "shasum": ""
+            },
+            "require-dev": {
+                "agelxnash/modx-evo-database": "1.4.*",
+                "phpunit/phpunit": "4.2.*"
+            },
+            "type": "evolutioncms-snippet",
+            "extra": {
+                "laravel": {
+                    "files": [
+                        {
+                            "source": "assets/",
+                            "destination": ""
+                        }
+                    ],
+                    "providers": [
+                        "EvolutionCMS\\DocLister\\DocListerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EvolutionCMS\\DocLister\\": "src"
+                },
+                "classmap": [
+                    "assets/snippets/DocLister/",
+                    "assets/lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "evocms package for work with documents",
+            "support": {
+                "source": "https://github.com/evolution-cms-extras/DocLister/tree/2.5.2.4"
+            },
+            "time": "2020-12-21T15:41:10+00:00"
+        },
+        {
             "name": "evolution-cms-extras/tinymce5",
             "version": "dev-master",
             "source": {

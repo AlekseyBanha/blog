@@ -10,7 +10,7 @@ class MainServiceProvider extends ServiceProvider
      * Если же указан namespace то файл test создаст чанк/сниппет с именем main#test
      * При этом поддерживаются файлы в подпапках. Т.е. файл test из папки subdir создаст элемент с именем subdir/test
      */
-    protected $namespace = 'main';
+    protected $namespace = '';
     /**
      * Register the service provider.
      *
@@ -18,14 +18,14 @@ class MainServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        /*$this->loadSnippetsFrom(
-            dirname(__DIR__). '/snippets/',
+        $this->loadSnippetsFrom(
+            dirname(__DIR__) . '/snippets/',
             $this->namespace
-        );*/
-        /*$this->loadChunksFrom(
+        );
+        $this->loadChunksFrom(
             dirname(__DIR__) . '/chunks/',
             $this->namespace
-        );*/
+        );
         /*$this->loadPluginsFrom(
             dirname(__DIR__) . '/plugins/'
         );*/
