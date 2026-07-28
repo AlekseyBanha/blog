@@ -13,6 +13,7 @@ services:
       DB_DATABASE: ${DB_DATABASE:-evolution}
       DB_USERNAME: ${DB_USERNAME:-evolution}
       DB_PASSWORD: ${DB_PASSWORD:-evolution_pass}
+      DB_PREFIX: ${DB_PREFIX:-k6on_}
     healthcheck:
       test:
         - CMD
@@ -22,12 +23,12 @@ services:
       interval: 10s
       timeout: 3s
       retries: 90
-      start_period: 15m
+      start_period: 5m
     volumes:
       - ./src:/var/www/html
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
 
   nginx:
     image: nginx:1.27-alpine
@@ -58,6 +59,16 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     volumes:
       - db_data:/var/lib/mysql
+      # Auto-import blog snapshot on first container init (empty volume only)
+      - ./database.sql:/docker-entrypoint-initdb.d/01-database.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
 
   phpmyadmin:
     image: phpmyadmin:5-apache
@@ -71,7 +82,8 @@ services:
       PMA_USER: root
       PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_pass}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
 volumes:
   db_data:
