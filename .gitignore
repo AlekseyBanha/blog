@@ -60,6 +60,7 @@ src/assets/cache/*
 !src/assets/cache/rss/
 !src/assets/cache/rss/index.html
 !src/assets/cache/updater/
+src/assets/cache/updater/*
 !src/assets/cache/updater/index.html
 
 # Local SQLite databases
