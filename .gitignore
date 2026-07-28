@@ -28,3 +28,45 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+# IDE / OS
+.idea/
+*.iml
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Evolution CMS — Composer local cache
+src/core/composer/cache/
+
+# Evolution CMS — runtime storage (regenerated)
+src/core/storage/sessions/
+src/core/storage/cache/
+src/core/storage/logs/
+src/core/storage/blade/
+src/core/storage/bootstrap/*
+!src/core/storage/bootstrap/.htaccess
+!src/core/storage/bootstrap/.gitignore
+
+# Evolution CMS — site cache (keep placeholders)
+src/assets/cache/*
+!src/assets/cache/.htaccess
+!src/assets/cache/index.html
+!src/assets/cache/siteManager.php
+!src/assets/cache/images/
+!src/assets/cache/images/.htaccess
+!src/assets/cache/images/ht.access
+!src/assets/cache/images/index.html
+!src/assets/cache/rss/
+!src/assets/cache/rss/index.html
+!src/assets/cache/updater/
+!src/assets/cache/updater/index.html
+
+# Local SQLite databases
+src/core/database/*.sqlite
+src/core/database/*.sqlite-*
+
+# IDE helpers
+evo_evolution.IDEhelper.php
+_ide_helper.php
+composer.phar
