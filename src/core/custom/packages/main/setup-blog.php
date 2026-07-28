@@ -116,6 +116,46 @@ function upsertPost(array $data, int $postTemplateId, int $tvImage, int $tvCateg
     return $id;
 }
 
+function upsertSlide(
+    array $data,
+    int $bannerParentId,
+    int $slideTemplateId,
+    int $tvImage,
+    int $tvCategory,
+    int $tvSlideUrl
+): int {
+    $doc = \EvolutionCMS\Models\SiteContent::query()
+        ->where('alias', $data['alias'])
+        ->where('parent', $bannerParentId)
+        ->first();
+    if (!$doc) {
+        $doc = new \EvolutionCMS\Models\SiteContent();
+    }
+
+    $doc->pagetitle = $data['pagetitle'];
+    $doc->longtitle = $data['pagetitle'];
+    $doc->menutitle = '';
+    $doc->alias = $data['alias'];
+    $doc->introtext = '';
+    $doc->content = '';
+    $doc->template = $slideTemplateId;
+    $doc->parent = $bannerParentId;
+    $doc->isfolder = 0;
+    $doc->published = 1;
+    $doc->deleted = 0;
+    $doc->hidemenu = 1;
+    $doc->menuindex = $data['menuindex'];
+    $doc->publishedon = $data['publishedon'];
+    $doc->save();
+
+    $id = (int) $doc->id;
+    setTvValue($id, $tvImage, $data['image']);
+    setTvValue($id, $tvCategory, $data['category']);
+    setTvValue($id, $tvSlideUrl, (string) $data['slide_url']);
+
+    return $id;
+}
+
 $tplHome = <<<'HTML'
 <!DOCTYPE html>
 <html lang="uk">
@@ -130,11 +170,11 @@ $tplHome = <<<'HTML'
   <div class="container-fluid">
     <div class="owl-banner owl-carousel">
       [[DocLister?
-        &parents=`5`
+        &parents=`BANNER_PARENT`
         &depth=`1`
-        &display=`6`
-        &orderBy=`publishedon DESC`
-        &tvList=`image,category,tags`
+        &display=`12`
+        &orderBy=`menuindex ASC`
+        &tvList=`image,category,slide_url`
         &dateSource=`publishedon`
         &dateFormat=`%d.%m.%Y`
         &tpl=`dl/banner`
@@ -298,6 +338,7 @@ $tplPost = <<<'HTML'
                   <ul class="post-info">
                     <li>Екскурсовод</li>
                     <li>[*publishedon:date=`%d.%m.%Y`*]</li>
+                    <li><i class="fa fa-eye"></i> [*views*] переглядів</li>
                   </ul>
                   [*content*]
                   <div class="post-options">
@@ -367,10 +408,38 @@ $tplPage = <<<'HTML'
 </html>
 HTML;
 
+// Banner folder (manual home slider) — created early so Home DocLister can reference it
+$bannerFolder = \EvolutionCMS\Models\SiteContent::query()
+    ->where('alias', 'banner')
+    ->where('parent', 0)
+    ->first();
+if (!$bannerFolder) {
+    $bannerFolder = new \EvolutionCMS\Models\SiteContent();
+    $bannerFolder->alias = 'banner';
+}
+$bannerFolder->pagetitle = 'Слайдер';
+$bannerFolder->longtitle = 'Слайди головного банера';
+$bannerFolder->menutitle = 'Слайдер';
+$bannerFolder->parent = 0;
+$bannerFolder->isfolder = 1;
+$bannerFolder->published = 1;
+$bannerFolder->deleted = 0;
+$bannerFolder->hidemenu = 1;
+$bannerFolder->menuindex = 99;
+$bannerFolder->content = '';
+$bannerFolder->template = 0;
+$bannerFolder->save();
+$bannerId = (int) $bannerFolder->id;
+
+$tplHome = str_replace('BANNER_PARENT', (string) $bannerId, $tplHome);
+
+$tplSlide = '<!-- Слайд банера: редагуйте заголовок, TV image / category / slide_url. Порядок — menuindex. -->';
+
 $homeId = upsertTemplate('Home', $tplHome, 'Головна сторінка блогу', 1);
 $blogId = upsertTemplate('Blog', $tplBlog, 'Список статей із бічною панеллю', 2);
 $postId = upsertTemplate('Post', $tplPost, 'Сторінка окремої статті');
 $pageId = upsertTemplate('Page', $tplPage, 'Статичні сторінки (Про нас, Контакти)');
+$slideId = upsertTemplate('Slide', $tplSlide, 'Слайд головного банера');
 
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($homeId)->update(['templatealias' => 'home']);
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($blogId)->update(['templatealias' => 'blog']);
@@ -380,10 +449,17 @@ $pageId = upsertTemplate('Page', $tplPage, 'Статичні сторінки (�
 $tvImage = upsertTv('image', 'Зображення', 'image');
 $tvCategory = upsertTv('category', 'Категорія', 'text', 'Карпати');
 $tvTags = upsertTv('tags', 'Теги', 'text', 'Подорожі, Україна');
+$tvSlideUrl = upsertTv('slide_url', 'Посилання слайда (URL або ID ресурсу)', 'text', '');
+$tvViews = upsertTv('views', 'Перегляди', 'number', '0');
 
-attachTv($tvImage, [$homeId, $blogId, $postId]);
-attachTv($tvCategory, [$postId]);
+attachTv($tvImage, [$homeId, $blogId, $postId, $slideId]);
+attachTv($tvCategory, [$postId, $slideId]);
 attachTv($tvTags, [$postId]);
+attachTv($tvSlideUrl, [$slideId]);
+attachTv($tvViews, [$postId]);
+
+$bannerFolder->template = $slideId;
+$bannerFolder->save();
 
 // Settings
 $modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('site_start', '1')");
@@ -558,9 +634,11 @@ $posts = [
 ];
 
 $keptAliases = [];
+$postIdsByAlias = [];
 foreach ($posts as $data) {
     $id = upsertPost($data, $postId, $tvImage, $tvCategory, $tvTags);
     $keptAliases[] = $data['alias'];
+    $postIdsByAlias[$data['alias']] = $id;
     echo "Post #{$id}: {$data['pagetitle']}\n";
 }
 
@@ -569,6 +647,77 @@ foreach ($posts as $data) {
     ->where('parent', 5)
     ->where('deleted', 0)
     ->whereNotIn('alias', $keptAliases)
+    ->update(['published' => 0, 'deleted' => 1]);
+
+// Home banner slides (manual CMS objects under «Слайдер»)
+$slides = [
+    [
+        'alias' => 'slide-hoverla',
+        'pagetitle' => 'Говерла — найвища вершина України',
+        'image' => 'assets/images/ua-hoverla.jpg',
+        'category' => 'Карпати',
+        'slide_url' => (string) ($postIdsByAlias['hoverla'] ?? ''),
+        'menuindex' => 0,
+        'publishedon' => $now - 86400 * 1,
+    ],
+    [
+        'alias' => 'slide-synevyr',
+        'pagetitle' => 'Озеро Синевир — перлина Закарпаття',
+        'image' => 'assets/images/ua-synevyr.jpg',
+        'category' => 'Озера та річки',
+        'slide_url' => (string) ($postIdsByAlias['synevyr'] ?? ''),
+        'menuindex' => 1,
+        'publishedon' => $now - 86400 * 3,
+    ],
+    [
+        'alias' => 'slide-kamianets',
+        'pagetitle' => 'Камʼянець-Подільська фортеця',
+        'image' => 'assets/images/ua-kamianets.jpg',
+        'category' => 'Фортеці та замки',
+        'slide_url' => (string) ($postIdsByAlias['kamianets-podilskyi'] ?? ''),
+        'menuindex' => 2,
+        'publishedon' => $now - 86400 * 5,
+    ],
+    [
+        'alias' => 'slide-sofiyivka',
+        'pagetitle' => 'Софіївка в Умані — сад, як поезія',
+        'image' => 'assets/images/ua-sofiyivka.jpg',
+        'category' => 'Парки та заповідники',
+        'slide_url' => (string) ($postIdsByAlias['sofiyivka'] ?? ''),
+        'menuindex' => 3,
+        'publishedon' => $now - 86400 * 7,
+    ],
+    [
+        'alias' => 'slide-kyiv',
+        'pagetitle' => 'Київські пагорби й краєвиди Дніпра',
+        'image' => 'assets/images/ua-kyiv.jpg',
+        'category' => 'Міські маршрути',
+        'slide_url' => (string) ($postIdsByAlias['kyiv-hills'] ?? ''),
+        'menuindex' => 4,
+        'publishedon' => $now - 86400 * 9,
+    ],
+    [
+        'alias' => 'slide-lviv',
+        'pagetitle' => 'Львів: площа Ринок і дахи старого міста',
+        'image' => 'assets/images/ua-lviv.jpg',
+        'category' => 'Міські маршрути',
+        'slide_url' => (string) ($postIdsByAlias['lviv-rynok'] ?? ''),
+        'menuindex' => 5,
+        'publishedon' => $now - 86400 * 11,
+    ],
+];
+
+$keptSlideAliases = [];
+foreach ($slides as $slide) {
+    $sid = upsertSlide($slide, $bannerId, $slideId, $tvImage, $tvCategory, $tvSlideUrl);
+    $keptSlideAliases[] = $slide['alias'];
+    echo "Slide #{$sid}: {$slide['pagetitle']}\n";
+}
+
+\EvolutionCMS\Models\SiteContent::query()
+    ->where('parent', $bannerId)
+    ->where('deleted', 0)
+    ->whereNotIn('alias', $keptSlideAliases)
     ->update(['published' => 0, 'deleted' => 1]);
 
 // About
@@ -715,6 +864,7 @@ $contact->save();
 $modx->clearCache('full');
 
 echo "Blog theme installed.\n";
-echo "Templates: Home={$homeId}, Blog={$blogId}, Post={$postId}, Page={$pageId}\n";
+echo "Templates: Home={$homeId}, Blog={$blogId}, Post={$postId}, Page={$pageId}, Slide={$slideId}\n";
+echo "Banner folder id={$bannerId}\n";
 echo "About id={$about->id}, Contact id={$contact->id}\n";
-echo "Posts: " . count($keptAliases) . "\n";
+echo "Posts: " . count($keptAliases) . ", Slides: " . count($keptSlideAliases) . "\n";

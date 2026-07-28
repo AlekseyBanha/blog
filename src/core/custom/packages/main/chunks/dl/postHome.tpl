@@ -9,6 +9,7 @@
       <ul class="post-info">
         <li>Екскурсовод</li>
         <li>[+date+]</li>
+        <li><i class="fa fa-eye"></i> [+tv.views+]</li>
       </ul>
       <p>[+introtext:nl2br+]</p>
       <div class="post-options">

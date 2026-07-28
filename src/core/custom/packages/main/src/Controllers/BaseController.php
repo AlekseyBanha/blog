@@ -136,6 +136,72 @@ class BaseController
         return $menu;
     }
 
+    /**
+     * Manual home banner slides from the hidden «Слайдер» folder (alias: banner).
+     */
+    protected function getBannerSlides(int $limit = 12): array
+    {
+        $bannerId = (int) SiteContent::query()
+            ->where('alias', 'banner')
+            ->where('parent', 0)
+            ->where('deleted', 0)
+            ->value('id');
+
+        if ($bannerId === 0) {
+            return [];
+        }
+
+        $docs = SiteContent::query()
+            ->where('parent', $bannerId)
+            ->where('published', 1)
+            ->where('deleted', 0)
+            ->orderBy('menuindex')
+            ->orderBy('id')
+            ->take($limit)
+            ->get();
+
+        if ($docs->isEmpty()) {
+            return [];
+        }
+
+        $rows = SiteContent::tvList($docs, ['image', 'category', 'slide_url']);
+        $out = [];
+        foreach ($rows as $row) {
+            $out[] = $this->mapSlide($row);
+        }
+
+        return $out;
+    }
+
+    protected function mapSlide(array $row): array
+    {
+        $mapped = $this->mapPost($row);
+        $tvs = $row['tvs'] ?? [];
+        $mapped['url'] = $this->resolveSlideUrl(trim((string) ($tvs['slide_url'] ?? '')));
+
+        return $mapped;
+    }
+
+    /**
+     * Accept absolute/relative URL, [~id~] tag, or bare resource id.
+     */
+    protected function resolveSlideUrl(string $value): string
+    {
+        if ($value === '') {
+            return '#';
+        }
+
+        if (preg_match('/^\[~(\d+)~]$/', $value, $m)) {
+            return $this->evo->makeUrl((int) $m[1]);
+        }
+
+        if (ctype_digit($value)) {
+            return $this->evo->makeUrl((int) $value);
+        }
+
+        return $value;
+    }
+
     protected function getPosts(int $limit = 6, int $offset = 0, array $filters = []): array
     {
         $docs = $this->postsQuery($filters)
@@ -238,7 +304,7 @@ class BaseController
             return [];
         }
 
-        $rows = SiteContent::tvList($docs, ['image', 'category', 'tags']);
+        $rows = SiteContent::tvList($docs, ['image', 'category', 'tags', 'views']);
         $out = [];
         foreach ($rows as $row) {
             $out[] = $this->mapPost($row);
@@ -262,6 +328,7 @@ class BaseController
         )));
 
         $publishedon = (int) ($row['publishedon'] ?? 0);
+        $views = max(0, (int) ($tvs['views'] ?? 0));
 
         return [
             'id' => (int) $row['id'],
@@ -274,6 +341,90 @@ class BaseController
             'tags' => $tags,
             'date' => $publishedon > 0 ? date('d.m.Y', $publishedon) : '',
             'publishedon' => $publishedon,
+            'views' => $views,
+            'views_label' => $this->formatViewsLabel($views),
         ];
+    }
+
+    /**
+     * Ukrainian plural for "перегляд".
+     */
+    protected function formatViewsLabel(int $views): string
+    {
+        $n = abs($views) % 100;
+        $n1 = $n % 10;
+        if ($n > 10 && $n < 20) {
+            $word = 'переглядів';
+        } elseif ($n1 > 1 && $n1 < 5) {
+            $word = 'перегляди';
+        } elseif ($n1 === 1) {
+            $word = 'перегляд';
+        } else {
+            $word = 'переглядів';
+        }
+
+        return $views . ' ' . $word;
+    }
+
+    /**
+     * Increment article views once per session (skip obvious bots).
+     */
+    protected function incrementPostViews(int $docId): int
+    {
+        if ($docId <= 0) {
+            return 0;
+        }
+
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        $sessionKey = 'post_viewed_' . $docId;
+        $alreadyCounted = !empty($_SESSION[$sessionKey]);
+
+        $tvId = (int) SiteTmplvar::query()->where('name', 'views')->value('id');
+        if ($tvId === 0) {
+            return 0;
+        }
+
+        $row = SiteTmplvarContentvalue::query()
+            ->where('tmplvarid', $tvId)
+            ->where('contentid', $docId)
+            ->first();
+
+        $current = $row ? max(0, (int) $row->value) : 0;
+
+        if ($alreadyCounted) {
+            return $current;
+        }
+
+        $_SESSION[$sessionKey] = time();
+        $current++;
+
+        if (!$row) {
+            $row = new SiteTmplvarContentvalue();
+            $row->tmplvarid = $tvId;
+            $row->contentid = $docId;
+        }
+        $row->value = (string) $current;
+        $row->save();
+
+        return $current;
+    }
+
+    protected function isBotRequest(): bool
+    {
+        $ua = strtolower((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+        if ($ua === '') {
+            return true;
+        }
+
+        foreach (['bot', 'spider', 'crawl', 'slurp', 'facebookexternalhit', 'preview'] as $needle) {
+            if (str_contains($ua, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

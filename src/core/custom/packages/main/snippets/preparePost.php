@@ -1,6 +1,6 @@
 <?php
 /**
- * Prepare DocLister rows: tags HTML + image fallback.
+ * Prepare DocLister rows: tags HTML + image fallback + banner slide link.
  */
 $tags = trim((string) ($data['tv.tags'] ?? ''));
 $html = [];
@@ -24,6 +24,20 @@ $data['tv.image'] = ltrim($image, '/');
 $category = trim((string) ($data['tv.category'] ?? ''));
 if ($category === '') {
     $data['tv.category'] = 'Подорожі';
+}
+
+$views = max(0, (int) ($data['tv.views'] ?? 0));
+$data['tv.views'] = (string) $views;
+
+$slideUrl = trim((string) ($data['tv.slide_url'] ?? ''));
+if ($slideUrl === '') {
+    $data['slide_href'] = $data['url'] ?? '#';
+} elseif (preg_match('/^\[~(\d+)~]$/', $slideUrl, $m)) {
+    $data['slide_href'] = '[~' . $m[1] . '~]';
+} elseif (ctype_digit($slideUrl)) {
+    $data['slide_href'] = '[~' . $slideUrl . '~]';
+} else {
+    $data['slide_href'] = $slideUrl;
 }
 
 return $data;

@@ -35,6 +35,7 @@
                                         <ul class="post-info">
                                             <li>Екскурсовод</li>
                                             <li>{{ $post['date'] }}</li>
+                                            <li><i class="fa fa-eye"></i> {{ $post['views_label'] }}</li>
                                         </ul>
                                         {!! $post['content'] !!}
                                         <div class="post-options">
