@@ -76,9 +76,49 @@ function setTvValue(int $docId, int $tvId, string $value): void
     $row->save();
 }
 
+function upsertPost(array $data, int $postTemplateId, int $tvImage, int $tvCategory, int $tvTags): int
+{
+    $doc = null;
+    if (!empty($data['id'])) {
+        $doc = \EvolutionCMS\Models\SiteContent::query()->find($data['id']);
+    }
+    if (!$doc && !empty($data['alias'])) {
+        $doc = \EvolutionCMS\Models\SiteContent::query()
+            ->where('alias', $data['alias'])
+            ->where('parent', 5)
+            ->first();
+    }
+    if (!$doc) {
+        $doc = new \EvolutionCMS\Models\SiteContent();
+    }
+
+    $doc->pagetitle = $data['pagetitle'];
+    $doc->longtitle = $data['pagetitle'];
+    $doc->menutitle = '';
+    $doc->alias = $data['alias'];
+    $doc->introtext = $data['introtext'];
+    $doc->content = $data['content'];
+    $doc->template = $postTemplateId;
+    $doc->parent = 5;
+    $doc->isfolder = 0;
+    $doc->published = 1;
+    $doc->deleted = 0;
+    $doc->hidemenu = 1;
+    $doc->menuindex = $data['menuindex'];
+    $doc->publishedon = $data['publishedon'];
+    $doc->save();
+
+    $id = (int) $doc->id;
+    setTvValue($id, $tvImage, $data['image']);
+    setTvValue($id, $tvCategory, $data['category']);
+    setTvValue($id, $tvTags, $data['tags']);
+
+    return $id;
+}
+
 $tplHome = <<<'HTML'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 {{head}}
 </head>
@@ -96,7 +136,7 @@ $tplHome = <<<'HTML'
         &orderBy=`publishedon DESC`
         &tvList=`image,category,tags`
         &dateSource=`publishedon`
-        &dateFormat=`%B %d, %Y`
+        &dateFormat=`%d.%m.%Y`
         &tpl=`dl/banner`
         &prepare=`preparePost`
         &noneWrapOuter=`0`
@@ -120,14 +160,14 @@ $tplHome = <<<'HTML'
               &orderBy=`publishedon DESC`
               &tvList=`image,category,tags`
               &dateSource=`publishedon`
-              &dateFormat=`%B %d, %Y`
+              &dateFormat=`%d.%m.%Y`
               &tpl=`dl/postHome`
               &prepare=`preparePost`
               &noneWrapOuter=`0`
             ]]
             <div class="col-lg-12">
               <div class="main-button">
-                <a href="[~5~]">View All Posts</a>
+                <a href="[~5~]">Усі статті</a>
               </div>
             </div>
           </div>
@@ -147,7 +187,7 @@ HTML;
 
 $tplBlog = <<<'HTML'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 {{head}}
 </head>
@@ -185,7 +225,7 @@ $tplBlog = <<<'HTML'
               &orderBy=`publishedon DESC`
               &tvList=`image,category,tags`
               &dateSource=`publishedon`
-              &dateFormat=`%B %d, %Y`
+              &dateFormat=`%d.%m.%Y`
               &tpl=`dl/postGrid`
               &prepare=`preparePost`
               &paginate=`pages`
@@ -216,7 +256,7 @@ HTML;
 
 $tplPost = <<<'HTML'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 {{head}}
 </head>
@@ -230,7 +270,7 @@ $tplPost = <<<'HTML'
       <div class="row">
         <div class="col-lg-12">
           <div class="text-content">
-            <h4>Post Details</h4>
+            <h4>Деталі маршруту</h4>
             <h2>[*pagetitle*]</h2>
           </div>
         </div>
@@ -256,8 +296,8 @@ $tplPost = <<<'HTML'
                   <span>[*category*]</span>
                   <a href="[~[*id*]~]"><h4>[*pagetitle*]</h4></a>
                   <ul class="post-info">
-                    <li><a href="#">Admin</a></li>
-                    <li><a href="#">[*publishedon:date=`%B %d, %Y`*]</a></li>
+                    <li>Екскурсовод</li>
+                    <li>[*publishedon:date=`%d.%m.%Y`*]</li>
                   </ul>
                   [*content*]
                   <div class="post-options">
@@ -271,8 +311,8 @@ $tplPost = <<<'HTML'
                       <div class="col-6">
                         <ul class="post-share">
                           <li><i class="fa fa-share-alt"></i></li>
-                          <li><a href="#">Facebook</a>,</li>
-                          <li><a href="#"> Twitter</a></li>
+                          <li><a href="https://www.facebook.com/ukraine_forever" target="_blank" rel="noopener noreferrer">Facebook</a>,</li>
+                          <li><a href="https://x.com/ukraine_forever" target="_blank" rel="noopener noreferrer"> Twitter</a></li>
                         </ul>
                       </div>
                     </div>
@@ -297,7 +337,7 @@ HTML;
 
 $tplPage = <<<'HTML'
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
 {{head}}
 </head>
@@ -327,19 +367,19 @@ $tplPage = <<<'HTML'
 </html>
 HTML;
 
-$homeId = upsertTemplate('Home', $tplHome, 'Stand Blog homepage', 1);
-$blogId = upsertTemplate('Blog', $tplBlog, 'Blog listing with sidebar', 2);
-$postId = upsertTemplate('Post', $tplPost, 'Single blog post');
-$pageId = upsertTemplate('Page', $tplPage, 'Static pages (About, Contact)');
+$homeId = upsertTemplate('Home', $tplHome, 'Головна сторінка блогу', 1);
+$blogId = upsertTemplate('Blog', $tplBlog, 'Список статей із бічною панеллю', 2);
+$postId = upsertTemplate('Post', $tplPost, 'Сторінка окремої статті');
+$pageId = upsertTemplate('Page', $tplPage, 'Статичні сторінки (Про нас, Контакти)');
 
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($homeId)->update(['templatealias' => 'home']);
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($blogId)->update(['templatealias' => 'blog']);
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($postId)->update(['templatealias' => 'post_details']);
 \EvolutionCMS\Models\SiteTemplate::query()->whereKey($pageId)->update(['templatealias' => 'page']);
 
-$tvImage = upsertTv('image', 'Image', 'image');
-$tvCategory = upsertTv('category', 'Category', 'text', 'Lifestyle');
-$tvTags = upsertTv('tags', 'Tags', 'text', 'Blog, Creative');
+$tvImage = upsertTv('image', 'Зображення', 'image');
+$tvCategory = upsertTv('category', 'Категорія', 'text', 'Карпати');
+$tvTags = upsertTv('tags', 'Теги', 'text', 'Подорожі, Україна');
 
 attachTv($tvImage, [$homeId, $blogId, $postId]);
 attachTv($tvCategory, [$postId]);
@@ -350,16 +390,16 @@ $modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name
 $modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('default_template', '{$postId}')");
 $modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('error_page', '1')");
 $modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('unauthorized_page', '1')");
-$modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('site_name', 'Stand Blog')");
+$modx->getDatabase()->query("REPLACE INTO {$prefix}system_settings (setting_name, setting_value) VALUES ('site_name', 'Блог Українських Екскурсоводів')");
 
 $now = time();
 
 // Home
 $home = \EvolutionCMS\Models\SiteContent::query()->find(1);
 if ($home) {
-    $home->pagetitle = 'Home';
-    $home->longtitle = 'Stand Blog';
-    $home->menutitle = 'Home';
+    $home->pagetitle = 'Головна';
+    $home->longtitle = 'Блог Українських Екскурсоводів';
+    $home->menutitle = 'Головна';
     $home->alias = 'index';
     $home->template = $homeId;
     $home->menuindex = 0;
@@ -374,9 +414,9 @@ if ($home) {
 // Blog folder
 $blog = \EvolutionCMS\Models\SiteContent::query()->find(5);
 if ($blog) {
-    $blog->pagetitle = 'Our Recent Blog Entries';
-    $blog->longtitle = 'Recent Posts';
-    $blog->menutitle = 'Blog Entries';
+    $blog->pagetitle = 'Маршрути Україною';
+    $blog->longtitle = 'Останні статті';
+    $blog->menutitle = 'Маршрути';
     $blog->alias = 'blog';
     $blog->template = $blogId;
     $blog->menuindex = 2;
@@ -389,87 +429,147 @@ if ($blog) {
 }
 
 $posts = [
-    6 => [
-        'pagetitle' => 'Best Template Website for HTML CSS',
-        'alias' => 'best-template-website',
-        'introtext' => 'Stand Blog is a free HTML CSS template for your CMS theme. You can easily adapt or customize it for any kind of CMS or website builder.',
-        'content' => '<p>Stand Blog is a free HTML CSS template for your CMS theme. You can easily adapt or customize it for any kind of CMS or website builder. You are allowed to use it for your business.</p><p>Nullam at quam ut lacus aliquam tempor vel sed ipsum. Donec pellentesque tincidunt imperdiet. Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio.</p>',
-        'image' => 'images/blog-post-01.jpg',
-        'category' => 'Lifestyle',
-        'tags' => 'Beauty, Nature',
+    [
+        'id' => 6,
+        'pagetitle' => 'Говерла — найвища вершина України',
+        'alias' => 'hoverla',
+        'introtext' => 'Підкоріть Говерлу — символ українських Карпат. Маршрут підходить і новачкам, і досвідченим мандрівникам.',
+        'content' => '<p>Говерла (2061 м) — найвища гора України, розташована в Чорногірському хребті. З вершини відкривається панорама на Чорногору, Петрос і полонини Закарпаття.</p><p>Найзручніший старт — з курорту Драгобрат або з села Лазещина. У гарну погоду підйом займає 3–5 годин. Обовʼязково візьміть теплу куртку, воду та трекінгове взуття: погода в горах змінюється швидко.</p><p>Найкращий сезон — з кінця травня до жовтня. Узимку маршрут потребує досвіду та спорядження. На вершині варто залишити кілька хвилин тиші — і зробити фото на згадку про справжню карпатську пригоду.</p>',
+        'image' => 'assets/images/ua-hoverla.jpg',
+        'category' => 'Карпати',
+        'tags' => 'Говерла, Гори, Трекінг',
         'menuindex' => 0,
         'publishedon' => $now - 86400 * 1,
     ],
-    7 => [
-        'pagetitle' => 'Etiam id diam vitae lorem dictum',
-        'alias' => 'etiam-id-diam-vitae-lorem-dictum',
-        'introtext' => 'You can support us by contributing a little via PayPal. If you have any question or feedback about this template, feel free to talk to us.',
-        'content' => '<p>You can support us by contributing a little via PayPal. If you have any question or feedback about this template, feel free to talk to us.</p><p>Also, you may check other CSS templates such as multi-page, resume, video, and more layouts from TemplateMo.</p>',
-        'image' => 'images/blog-post-02.jpg',
-        'category' => 'Healthy',
-        'tags' => 'Best Templates, TemplateMo',
+    [
+        'id' => 7,
+        'pagetitle' => 'Озеро Синевир — перлина Закарпаття',
+        'alias' => 'synevyr',
+        'introtext' => 'Найбільше гірське озеро Українських Карпат зачаровує кольором води й легендами про кохання.',
+        'content' => '<p>Синевир називають «Морським оком Карпат». Озеро лежить на висоті близько 989 м у Національному природному парку «Синевир» і оточене смерековими лісами.</p><p>До озера зручно дістатися з Міжгірʼя. Навколо — екологічні стежки, оглядові майданчики та центр реабілітації бурих ведмедів. Вода холодна навіть улітку, тож купання — лише для найсміливіших.</p><p>Приїжджайте рано вранці: туман над гладдю води створює майже казковий краєвид. Не забудьте фотоапарат і термос із чаєм — після прогулянки лісом він стане в пригоді.</p>',
+        'image' => 'assets/images/ua-synevyr.jpg',
+        'category' => 'Озера та річки',
+        'tags' => 'Синевир, Закарпаття, Озера',
         'menuindex' => 1,
         'publishedon' => $now - 86400 * 3,
     ],
-    8 => [
-        'pagetitle' => 'Donec tincidunt leo nec magna',
-        'alias' => 'donec-tincidunt-leo-nec-magna',
-        'introtext' => 'Nullam at quam ut lacus aliquam tempor vel sed ipsum. Donec pellentesque tincidunt imperdiet.',
-        'content' => '<p>Nullam at quam ut lacus aliquam tempor vel sed ipsum. Donec pellentesque tincidunt imperdiet. Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio.</p><p>Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo. Phasellus interdum, diam commodo egestas rhoncus, turpis nisi consectetur nibh.</p>',
-        'image' => 'images/blog-post-03.jpg',
-        'category' => 'Fashion',
-        'tags' => 'HTML CSS, Photoshop',
+    [
+        'id' => 8,
+        'pagetitle' => 'Камʼянець-Подільська фортеця',
+        'alias' => 'kamianets-podilskyi',
+        'introtext' => 'Один із наймальовничіших замків України стоїть на скелястому острові, оточеному петлею річки Смотрич.',
+        'content' => '<p>Камʼянець-Подільська фортеця — візитівка Поділля й одна з найкраще збережених оборонних споруд країни. Камʼяні башти, мости й глибокий каньйон Смотрича створюють краєвид, який легко впізнати навіть із поштових листівок.</p><p>Огляньте Старе місто, Польську й Вірменську брами, підніміться на башти фортеці та пройдіть міст, що веде до цитаделі. Увечері підсвітка робить камʼяні стіни особливо драматичними.</p><p>Поруч варто відвідати каньйон Смотрича й панорами з оглядових майданчиків. Фортеця ідеально пасує для одноденної поїздки або вікенду з нічлігом у старому місті.</p>',
+        'image' => 'assets/images/ua-kamianets.jpg',
+        'category' => 'Фортеці та замки',
+        'tags' => 'Фортеця, Поділля, Історія',
         'menuindex' => 2,
         'publishedon' => $now - 86400 * 5,
     ],
-    9 => [
-        'pagetitle' => 'Vestibulum id turpis porttitor sapien',
-        'alias' => 'vestibulum-id-turpis-porttitor-sapien',
-        'introtext' => 'Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.',
-        'content' => '<p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p><p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet.</p>',
-        'image' => 'images/blog-thumb-04.jpg',
-        'category' => 'Nature',
-        'tags' => 'Lifestyle, Creative',
+    [
+        'id' => 9,
+        'pagetitle' => 'Софіївка в Умані — сад, як поезія',
+        'alias' => 'sofiyivka',
+        'introtext' => 'Національний дендропарк «Софіївка» — шедевр садово-паркового мистецтва серед мальовничих схилів Черкащини.',
+        'content' => '<p>«Софіївку» закладено наприкінці XVIII століття на честь Софії Потоцької. Гроти, водоспади, штучні озера й античні альтанки створюють атмосферу європейського парку романтизму.</p><p>Найкраще гуляти зранку або пізно вдень, коли менше відвідувачів і мʼякше світло для фото. Обовʼязкові локації — Нижній став, Грот Венери, Каліпсо та Центральна алея.</p><p>Парк цікавий у будь-яку пору року: навесні — цвітіння, улітку — прохолода біля води, восени — золоте листя. Це ідеальний маршрут для сімейної подорожі та спокійного відпочинку серед природи.</p>',
+        'image' => 'assets/images/ua-sofiyivka.jpg',
+        'category' => 'Парки та заповідники',
+        'tags' => 'Софіївка, Умань, Парки',
         'menuindex' => 3,
         'publishedon' => $now - 86400 * 7,
     ],
-    10 => [
-        'pagetitle' => 'Suspendisse et metus nec libero',
-        'alias' => 'suspendisse-et-metus-nec-libero',
-        'introtext' => 'Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.',
-        'content' => '<p>Suspendisse et metus nec libero ultrices varius eget in risus. Cras id nibh at erat pulvinar malesuada et non ipsum.</p><p>Donec tincidunt leo nec magna gravida varius. Vivamus facilisis dignissim arcu et blandit.</p>',
-        'image' => 'images/blog-thumb-05.jpg',
-        'category' => 'Lifestyle',
-        'tags' => 'Inspiration, Motivation',
+    [
+        'id' => 10,
+        'pagetitle' => 'Київські пагорби й краєвиди Дніпра',
+        'alias' => 'kyiv-hills',
+        'introtext' => 'Столиця відкривається з пагорбів: Володимирська гірка, Андріївський узвіз і набережна Дніпра.',
+        'content' => '<p>Київ побудований на пагорбах, і саме звідси місто виглядає найвиразніше. Почніть із Володимирської гірки, спустіться Андріївським узвозом до Подолу, а звідти вийдіть до набережної Дніпра.</p><p>Уздовж маршруту — Андріївська церква, контрасти старої й нової архітектури, каштани й широкі панорами на лівий берег. У золоту годину місто особливо фотогенічне.</p><p>Для довшої прогулянки додайте Печерськ, Маріїнський парк і міст пішоходів. Київський маршрут легко адаптувати і для короткої прогулянки, і для цілого дня відкриттів.</p>',
+        'image' => 'assets/images/ua-kyiv.jpg',
+        'category' => 'Міські маршрути',
+        'tags' => 'Київ, Дніпро, Місто',
         'menuindex' => 4,
         'publishedon' => $now - 86400 * 9,
     ],
+    [
+        'pagetitle' => 'Львів: площа Ринок і дахи старого міста',
+        'alias' => 'lviv-rynok',
+        'introtext' => 'Серце Галичини — бруківка, кавʼярні й панорами з оглядових веж історичного центру.',
+        'content' => '<p>Площа Ринок — точка, з якої зручно починати будь-яку львівську прогулянку. Ратуша, камʼяниці з різними фасадами, дворики й вузькі вулички ведуть до Оперного театру, Високого Замку та Личаківського цвинтаря.</p><p>Підніміться на вежу ратуші або на Високий Замок — звідти відкривається класичний краєвид на дахи старого міста. Увечері площа оживає музикою й світлом кавʼярень.</p><p>Львів варто досліджувати повільно: між музеями залишайте час на каву по-львівськи та випадкові дворики. Саме в деталях місто розкривається найкраще.</p>',
+        'image' => 'assets/images/ua-lviv.jpg',
+        'category' => 'Міські маршрути',
+        'tags' => 'Львів, Галичина, Архітектура',
+        'menuindex' => 5,
+        'publishedon' => $now - 86400 * 11,
+    ],
+    [
+        'pagetitle' => 'Одеса й Чорноморське узбережжя',
+        'alias' => 'odesa-sea',
+        'introtext' => 'Морське повітря, Потьомкінські сходи й довгі пляжі — класика південного маршруту Україною.',
+        'content' => '<p>Одеса зустрічає широкими бульварами, колоритом Приморського бульвару та видом на Чорне море з Потьомкінських сходів. Місто легко поєднує історію, море й гастрономію.</p><p>Після прогулянки центром вирушайте на Аркадію або Ланжерон. У сезон тут багато життя, а в міжсезоння узбережжя дарує спокійніші краєвиди й довгі прогулянки вздовж хвиль.</p><p>Додайте до маршруту Одеський оперний театр, Дерибасівську та порт. Одеса — про настрій: трохи сонця, трохи солоного вітру й багато історій на кожному розі.</p>',
+        'image' => 'assets/images/ua-odesa.jpg',
+        'category' => 'Чорноморське узбережжя',
+        'tags' => 'Одеса, Море, Пляж',
+        'menuindex' => 6,
+        'publishedon' => $now - 86400 * 13,
+    ],
+    [
+        'pagetitle' => 'Хотинська фортеця над Дністром',
+        'alias' => 'khotyn-fortress',
+        'introtext' => 'Могутні мури Хотина височіють над Дністром і зберігають памʼять про великі битви Європи.',
+        'content' => '<p>Хотинська фортеця — один із найпотужніших оборонних комплексів України. Її вежі й мури стоять на високому березі Дністра, а краєвид довкола нагадує декорації до історичного фільму.</p><p>Усередині комплексу можна пройти подвірʼям, піднятися на стіни й уявити масштаб подій XVII століття. Поруч — мальовничі схили й річкові панорами, ідеальні для фото.</p><p>Зручно поєднувати з Камʼянцем-Подільським у один вікенд-маршрут Поділлям. Хотин особливо вражає на заході сонця, коли камінь набуває теплого відтінку.</p>',
+        'image' => 'assets/images/ua-khotyn.jpg',
+        'category' => 'Фортеці та замки',
+        'tags' => 'Хотин, Дністер, Фортеця',
+        'menuindex' => 7,
+        'publishedon' => $now - 86400 * 15,
+    ],
+    [
+        'pagetitle' => 'Шацькі озера та кришталевий Світязь',
+        'alias' => 'shatsk-svityaz',
+        'introtext' => 'На Волині розкинувся край блакитних озер, головне з яких — прозоре озеро Світязь.',
+        'content' => '<p>Шацький національний природний парк обʼєднує десятки озер. Найвідоміше — Світязь: широке, світле, з водою, у якій видно дно на кілька метрів.</p><p>Тут добре купатися, кататися на велосипеді між озерами, спостерігати птахів і зустрічати світанки на березі. Інфраструктура розвинена, тож маршрут підходить і для сімейного відпочинку.</p><p>Окрім Світязя, загляньте до озер Пісочне й Луки. Шаччина — це про тишу, воду й відчуття, ніби Україна має власне «внутрішнє море».</p>',
+        'image' => 'assets/images/ua-shatsk.jpg',
+        'category' => 'Озера та річки',
+        'tags' => 'Світязь, Волинь, Озера',
+        'menuindex' => 8,
+        'publishedon' => $now - 86400 * 17,
+    ],
+    [
+        'pagetitle' => 'Драгобрат — високогірʼя Карпат',
+        'alias' => 'dragobrat',
+        'introtext' => 'Найвищий гірськолижний курорт України влітку стає базою для походів на Близницю та полонини.',
+        'content' => '<p>Драгобрат розташований на висоті понад 1300 м і відкриває доступ до мальовничих хребтів Свидовця. Узимку сюди їдуть кататися, улітку — гуляти полонинами й підніматися на Близницю.</p><p>Повітря тут прохолодне навіть у липні, а краєвиди змінюються з кожним поворотом стежки. Ночуйте в готелі чи колибі, щоб зустріти світанок над хмарами.</p><p>Це чудова точка старту для багатоденних маршрутів Карпатами. Візьміть шари одягу, зручне взуття й запасіться часом — Драгобрат не любить поспіху.</p>',
+        'image' => 'assets/images/ua-dragobrat.jpg',
+        'category' => 'Карпати',
+        'tags' => 'Драгобрат, Свидовець, Гори',
+        'menuindex' => 9,
+        'publishedon' => $now - 86400 * 19,
+    ],
+    [
+        'pagetitle' => 'Скелі Довбуша: стежки серед камʼяних велетнів',
+        'alias' => 'skeli-dovbusha',
+        'introtext' => 'У лісах Івано-Франківщини ховаються скелі, оповиті легендами про опришка Олексу Довбуша.',
+        'content' => '<p>Скелі Довбуша — унікальний скельний комплекс і популярний екотуристичний маршрут біля Бубнища. Піщаникові брили утворюють коридори, печери й оглядові майданчики серед густого лісу.</p><p>Маршрут відносно доступний, але місцями потребує обережності: сходи, вузькі проходи й вологий камінь. Історичний шар легенд про Довбуша додає місцю особливої атмосфери.</p><p>Ідеально для одноденної поїздки з Івано-Франківська чи зі Львова. Після скель можна продовжити день у Карпатах — наприклад, у напрямку Татарова чи Буковеля.</p>',
+        'image' => 'assets/images/ua-dovbush.jpg',
+        'category' => 'Парки та заповідники',
+        'tags' => 'Довбуш, Скелі, Прикарпаття',
+        'menuindex' => 10,
+        'publishedon' => $now - 86400 * 21,
+    ],
 ];
 
-foreach ($posts as $id => $data) {
-    $doc = \EvolutionCMS\Models\SiteContent::query()->find($id);
-    if (!$doc) {
-        continue;
-    }
-    $doc->pagetitle = $data['pagetitle'];
-    $doc->longtitle = $data['pagetitle'];
-    $doc->menutitle = '';
-    $doc->alias = $data['alias'];
-    $doc->introtext = $data['introtext'];
-    $doc->content = $data['content'];
-    $doc->template = $postId;
-    $doc->parent = 5;
-    $doc->isfolder = 0;
-    $doc->published = 1;
-    $doc->hidemenu = 1;
-    $doc->menuindex = $data['menuindex'];
-    $doc->publishedon = $data['publishedon'];
-    $doc->save();
-
-    setTvValue($id, $tvImage, $data['image']);
-    setTvValue($id, $tvCategory, $data['category']);
-    setTvValue($id, $tvTags, $data['tags']);
+$keptAliases = [];
+foreach ($posts as $data) {
+    $id = upsertPost($data, $postId, $tvImage, $tvCategory, $tvTags);
+    $keptAliases[] = $data['alias'];
+    echo "Post #{$id}: {$data['pagetitle']}\n";
 }
+
+// Unpublish any other posts under blog folder that are not in the new set
+\EvolutionCMS\Models\SiteContent::query()
+    ->where('parent', 5)
+    ->where('deleted', 0)
+    ->whereNotIn('alias', $keptAliases)
+    ->update(['published' => 0, 'deleted' => 1]);
 
 // About
 $about = \EvolutionCMS\Models\SiteContent::query()->where('alias', 'about')->first();
@@ -477,9 +577,9 @@ if (!$about) {
     $about = new \EvolutionCMS\Models\SiteContent();
     $about->alias = 'about';
 }
-$about->pagetitle = 'more about us!';
-$about->longtitle = 'about us';
-$about->menutitle = 'About Us';
+$about->pagetitle = 'трохи про нас';
+$about->longtitle = 'про нас';
+$about->menutitle = 'Про нас';
 $about->template = $pageId;
 $about->parent = 0;
 $about->isfolder = 0;
@@ -491,19 +591,19 @@ $about->content = <<<'HTML'
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <img src="images/about-us.jpg" alt="About us">
-        <p>Welcome to Stand Blog on Evolution CMS. This page is editable from the manager — change the content, image and headings anytime.</p>
-        <p>Pellentesque quis luctus libero. Maecenas pretium molestie erat, ac tincidunt leo gravida ac. Cras ullamcorper eu ipsum eu sollicitudin. Fusce vitae commodo turpis.</p>
+        <img src="assets/images/about-us.jpg" alt="Про нас">
+        <p>Блог Українських Екскурсоводів — це зібрання маршрутів, краєвидів і цікавих місць України. Ми збираємо ідеї для подорожей горами, озерами, фортецями та містами.</p>
+        <p>Наша мета — допомогти мандрівникам відкривати країну глибше: від Говерли й Синевира до Львова, Одеси та каньйонів Поділля.</p>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-6">
-        <h4>Two-One Donec porttitor augue</h4>
-        <p>Quisque bibendum cursus viverra. Mauris at ex ipsum. Aenean condimentum urna nisl, eget interdum ante euismod vel.</p>
+        <h4>Що ви знайдете в статтях</h4>
+        <p>Короткі описи маршрутів, практичні поради, найкращі сезони для візиту та атмосферні фотографії українських локацій.</p>
       </div>
       <div class="col-lg-6">
-        <h4>Two-Two Donec porttitor augue</h4>
-        <p>Maecenas et metus nisl. Morbi ac interdum metus. Aliquam erat volutpat. Donec posuere tortor vel volutpat consequat.</p>
+        <h4>Для кого цей блог</h4>
+        <p>Для самостійних мандрівників, сімей і всіх, хто шукає натхнення для наступної подорожі Україною.</p>
       </div>
     </div>
   </div>
@@ -517,9 +617,9 @@ if (!$contact) {
     $contact = new \EvolutionCMS\Models\SiteContent();
     $contact->alias = 'contact';
 }
-$contact->pagetitle = "let's stay in touch!";
-$contact->longtitle = 'contact us';
-$contact->menutitle = 'Contact Us';
+$contact->pagetitle = "зв'яжімося!";
+$contact->longtitle = 'контакти';
+$contact->menutitle = 'Контакти';
 $contact->template = $pageId;
 $contact->parent = 0;
 $contact->isfolder = 0;
@@ -536,34 +636,34 @@ $contact->content = <<<'HTML'
             <div class="col-lg-8">
               <div class="sidebar-item contact-form">
                 <div class="sidebar-heading">
-                  <h2>Send us a message</h2>
+                  <h2>Напишіть нам</h2>
                 </div>
                 <div class="content">
                   <form id="contact" action="" method="post">
                     <div class="row">
                       <div class="col-md-6 col-sm-12">
                         <fieldset>
-                          <input name="name" type="text" id="name" placeholder="Your name" required>
+                          <input name="name" type="text" id="name" placeholder="Ваше ім'я" required>
                         </fieldset>
                       </div>
                       <div class="col-md-6 col-sm-12">
                         <fieldset>
-                          <input name="email" type="text" id="email" placeholder="Your email" required>
+                          <input name="email" type="text" id="email" placeholder="Ваш email" required>
                         </fieldset>
                       </div>
                       <div class="col-md-12 col-sm-12">
                         <fieldset>
-                          <input name="subject" type="text" id="subject" placeholder="Subject">
+                          <input name="subject" type="text" id="subject" placeholder="Тема">
                         </fieldset>
                       </div>
                       <div class="col-lg-12">
                         <fieldset>
-                          <textarea name="message" rows="6" id="message" placeholder="Your Message" required></textarea>
+                          <textarea name="message" rows="6" id="message" placeholder="Ваше повідомлення" required></textarea>
                         </fieldset>
                       </div>
                       <div class="col-lg-12">
                         <fieldset>
-                          <button type="submit" id="form-submit" class="main-button">Send Message</button>
+                          <button type="submit" id="form-submit" class="main-button">Надіслати</button>
                         </fieldset>
                       </div>
                     </div>
@@ -574,21 +674,21 @@ $contact->content = <<<'HTML'
             <div class="col-lg-4">
               <div class="sidebar-item contact-information">
                 <div class="sidebar-heading">
-                  <h2>contact information</h2>
+                  <h2>контактна інформація</h2>
                 </div>
                 <div class="content">
                   <ul>
                     <li>
-                      <h5>090-484-8080</h5>
-                      <span>PHONE NUMBER</span>
+                      <h5>+380 44 000 00 00</h5>
+                      <span>ТЕЛЕФОН</span>
                     </li>
                     <li>
-                      <h5>info@company.com</h5>
-                      <span>EMAIL ADDRESS</span>
+                      <h5>info@ua-guides.local</h5>
+                      <span>EMAIL</span>
                     </li>
                     <li>
-                      <h5>123 Aenean id posuere dui,<br>Praesent laoreet 10660</h5>
-                      <span>STREET ADDRESS</span>
+                      <h5>м. Київ,<br>вул. Хрещатик, 1</h5>
+                      <span>АДРЕСА</span>
                     </li>
                   </ul>
                 </div>
@@ -599,7 +699,7 @@ $contact->content = <<<'HTML'
       </div>
       <div class="col-lg-12">
         <div id="map">
-          <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="450px" frameborder="0" style="border:0" allowfullscreen></iframe>
+          <iframe src="https://maps.google.com/maps?q=Kyiv,+Ukraine&t=&z=12&ie=UTF8&iwloc=&output=embed" width="100%" height="450px" frameborder="0" style="border:0" allowfullscreen></iframe>
         </div>
       </div>
     </div>
@@ -617,3 +717,4 @@ $modx->clearCache('full');
 echo "Blog theme installed.\n";
 echo "Templates: Home={$homeId}, Blog={$blogId}, Post={$postId}, Page={$pageId}\n";
 echo "About id={$about->id}, Contact id={$contact->id}\n";
+echo "Posts: " . count($keptAliases) . "\n";

@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-content">
-                            <h4>Post Details</h4>
+                            <h4>Деталі маршруту</h4>
                             <h2>{{ $post['pagetitle'] }}</h2>
                         </div>
                     </div>
@@ -30,11 +30,11 @@
                                         <img src="{{ $post['image'] }}" alt="{{ $post['pagetitle'] }}">
                                     </div>
                                     <div class="down-content">
-                                        <span>{{ $post['category'] }}</span>
+                                        <span><a href="{{ $blogUrl }}?category={{ urlencode($post['category']) }}">{{ $post['category'] }}</a></span>
                                         <a href="{{ $post['url'] }}"><h4>{{ $post['pagetitle'] }}</h4></a>
                                         <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">{{ $post['date'] }}</a></li>
+                                            <li>Екскурсовод</li>
+                                            <li>{{ $post['date'] }}</li>
                                         </ul>
                                         {!! $post['content'] !!}
                                         <div class="post-options">
@@ -43,15 +43,15 @@
                                                     <ul class="post-tags">
                                                         <li><i class="fa fa-tags"></i></li>
                                                         @foreach($post['tags'] as $i => $tag)
-                                                            <li><a href="{{ $blogUrl }}">{{ $tag }}</a>@if($i < count($post['tags']) - 1),@endif</li>
+                                                            <li><a href="{{ $blogUrl }}?tag={{ urlencode($tag) }}">{{ $tag }}</a>@if($i < count($post['tags']) - 1),@endif</li>
                                                         @endforeach
                                                     </ul>
                                                 </div>
                                                 <div class="col-6">
                                                     <ul class="post-share">
                                                         <li><i class="fa fa-share-alt"></i></li>
-                                                        <li><a href="#">Facebook</a>,</li>
-                                                        <li><a href="#"> Twitter</a></li>
+                                                        <li><a href="https://www.facebook.com/ukraine_forever" target="_blank" rel="noopener noreferrer">Facebook</a>,</li>
+                                                        <li><a href="https://x.com/ukraine_forever" target="_blank" rel="noopener noreferrer"> Twitter</a></li>
                                                     </ul>
                                                 </div>
                                             </div>

@@ -1,6 +1,6 @@
-<li><a href="[~5~]">- Nature Lifestyle</a></li>
-<li><a href="[~5~]">- Awesome Layouts</a></li>
-<li><a href="[~5~]">- Creative Ideas</a></li>
-<li><a href="[~5~]">- Responsive Templates</a></li>
-<li><a href="[~5~]">- HTML5 / CSS3 Templates</a></li>
-<li><a href="[~5~]">- Creative &amp; Unique</a></li>
+<li><a href="[~5~]?category=Карпати">- Карпати</a></li>
+<li><a href="[~5~]?category=Озера та річки">- Озера та річки</a></li>
+<li><a href="[~5~]?category=Фортеці та замки">- Фортеці та замки</a></li>
+<li><a href="[~5~]?category=Міські маршрути">- Міські маршрути</a></li>
+<li><a href="[~5~]?category=Парки та заповідники">- Парки та заповідники</a></li>
+<li><a href="[~5~]?category=Чорноморське узбережжя">- Чорноморське узбережжя</a></li>

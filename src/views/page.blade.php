@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-content">
-                            <h4>{{ $doc['longtitle'] ?: 'Page' }}</h4>
+                            <h4>{{ $doc['longtitle'] ?: 'Сторінка' }}</h4>
                             <h2>{{ $doc['pagetitle'] }}</h2>
                         </div>
                     </div>

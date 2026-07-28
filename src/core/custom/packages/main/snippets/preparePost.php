@@ -9,20 +9,21 @@ if ($tags !== '') {
     $last = count($parts) - 1;
     foreach ($parts as $i => $tag) {
         $comma = $i < $last ? ',' : '';
-        $html[] = '<li><a href="#">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</a>' . $comma . '</li>';
+        $url = '[~5~]?tag=' . rawurlencode($tag);
+        $html[] = '<li><a href="' . $url . '">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</a>' . $comma . '</li>';
     }
 }
 $data['tags_html'] = implode("\n", $html);
 
 $image = trim((string) ($data['tv.image'] ?? ''));
 if ($image === '') {
-    $image = 'images/blog-thumb-01.jpg';
+    $image = 'assets/images/blog-thumb-01.jpg';
 }
 $data['tv.image'] = ltrim($image, '/');
 
 $category = trim((string) ($data['tv.category'] ?? ''));
 if ($category === '') {
-    $data['tv.category'] = 'Blog';
+    $data['tv.category'] = 'Подорожі';
 }
 
 return $data;

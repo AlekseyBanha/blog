@@ -5,12 +5,12 @@
                 <div class="main-content">
                     <div class="row">
                         <div class="col-lg-8">
-                            <span>{{ $siteName }} HTML5 Template</span>
-                            <h4>Creative HTML Template For Bloggers!</h4>
+                            <span>{{ $siteName }}</span>
+                            <h4>Відкривайте найкрасивіші куточки України!</h4>
                         </div>
                         <div class="col-lg-4">
                             <div class="main-button">
-                                <a href="{{ $blogUrl }}">View Blog</a>
+                                <a href="{{ $blogUrl }}">Усі маршрути</a>
                             </div>
                         </div>
                     </div>

@@ -6,7 +6,7 @@
             <div class="owl-banner owl-carousel">
                 @foreach($bannerPosts as $item)
                     <div class="item">
-                        <img src="{{ $item['image'] }}" alt="{{ $item['pagetitle'] }}">
+                        <a href="{{ $item['url'] }}"><img src="{{ $item['image'] }}" alt="{{ $item['pagetitle'] }}"></a>
                         <div class="item-content">
                             <div class="main-content">
                                 <div class="meta-category">
@@ -14,8 +14,8 @@
                                 </div>
                                 <a href="{{ $item['url'] }}"><h4>{{ $item['pagetitle'] }}</h4></a>
                                 <ul class="post-info">
-                                    <li><a href="{{ $item['url'] }}">Admin</a></li>
-                                    <li><a href="{{ $item['url'] }}">{{ $item['date'] }}</a></li>
+                                    <li>Екскурсовод</li>
+                                    <li>{{ $item['date'] }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -37,14 +37,14 @@
                                 <div class="col-lg-12">
                                     <div class="blog-post">
                                         <div class="blog-thumb">
-                                            <img src="{{ $item['image'] }}" alt="{{ $item['pagetitle'] }}">
+                                            <a href="{{ $item['url'] }}"><img src="{{ $item['image'] }}" alt="{{ $item['pagetitle'] }}"></a>
                                         </div>
                                         <div class="down-content">
-                                            <span>{{ $item['category'] }}</span>
+                                            <span><a href="{{ $blogUrl }}?category={{ urlencode($item['category']) }}">{{ $item['category'] }}</a></span>
                                             <a href="{{ $item['url'] }}"><h4>{{ $item['pagetitle'] }}</h4></a>
                                             <ul class="post-info">
-                                                <li><a href="{{ $item['url'] }}">Admin</a></li>
-                                                <li><a href="{{ $item['url'] }}">{{ $item['date'] }}</a></li>
+                                                <li>Екскурсовод</li>
+                                                <li>{{ $item['date'] }}</li>
                                             </ul>
                                             <p>{{ $item['introtext'] }}</p>
                                             <div class="post-options">
@@ -53,15 +53,15 @@
                                                         <ul class="post-tags">
                                                             <li><i class="fa fa-tags"></i></li>
                                                             @foreach($item['tags'] as $i => $tag)
-                                                                <li><a href="{{ $blogUrl }}">{{ $tag }}</a>@if($i < count($item['tags']) - 1),@endif</li>
+                                                                <li><a href="{{ $blogUrl }}?tag={{ urlencode($tag) }}">{{ $tag }}</a>@if($i < count($item['tags']) - 1),@endif</li>
                                                             @endforeach
                                                         </ul>
                                                     </div>
                                                     <div class="col-6">
                                                         <ul class="post-share">
                                                             <li><i class="fa fa-share-alt"></i></li>
-                                                            <li><a href="#">Facebook</a>,</li>
-                                                            <li><a href="#"> Twitter</a></li>
+                                                            <li><a href="https://www.facebook.com/ukraine_forever" target="_blank" rel="noopener noreferrer">Facebook</a>,</li>
+                                                            <li><a href="https://x.com/ukraine_forever" target="_blank" rel="noopener noreferrer"> Twitter</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -70,11 +70,11 @@
                                     </div>
                                 </div>
                             @empty
-                                <div class="col-lg-12"><p>No posts yet.</p></div>
+                                <div class="col-lg-12"><p>Статей поки немає.</p></div>
                             @endforelse
                             <div class="col-lg-12">
                                 <div class="main-button">
-                                    <a href="{{ $blogUrl }}">View All Posts</a>
+                                    <a href="{{ $blogUrl }}">Усі статті</a>
                                 </div>
                             </div>
                         </div>

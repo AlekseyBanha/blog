@@ -2,15 +2,16 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="sidebar-item search">
-                <form id="search_form" name="gs" method="GET" action="{{ $blogUrl }}">
-                    <input type="text" name="search" class="searchText" placeholder="type to search..." autocomplete="on" value="{{ $_GET['search'] ?? '' }}">
+                <form id="search_form" name="gs" method="GET" action="{{ $blogUrl }}" role="search">
+                    <input type="text" name="search" class="searchText" placeholder="пошук маршрутів..." autocomplete="off" value="{{ $filters['search'] ?? '' }}">
+                    <button type="submit" aria-label="Шукати"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
         <div class="col-lg-12">
             <div class="sidebar-item recent-posts">
                 <div class="sidebar-heading">
-                    <h2>Recent Posts</h2>
+                    <h2>Останні статті</h2>
                 </div>
                 <div class="content">
                     <ul>
@@ -29,12 +30,17 @@
         <div class="col-lg-12">
             <div class="sidebar-item categories">
                 <div class="sidebar-heading">
-                    <h2>Categories</h2>
+                    <h2>Категорії</h2>
                 </div>
                 <div class="content">
                     <ul>
                         @foreach($categories as $category)
-                            <li><a href="{{ $blogUrl }}">- {{ $category }}</a></li>
+                            <li>
+                                <a href="{{ $blogUrl }}?category={{ urlencode($category) }}"
+                                   class="{{ ($filters['category'] ?? '') === $category ? 'active' : '' }}">
+                                    - {{ $category }}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -43,12 +49,17 @@
         <div class="col-lg-12">
             <div class="sidebar-item tags">
                 <div class="sidebar-heading">
-                    <h2>Tag Clouds</h2>
+                    <h2>Теги</h2>
                 </div>
                 <div class="content">
                     <ul>
                         @foreach($tagCloud as $tag)
-                            <li><a href="{{ $blogUrl }}">{{ $tag }}</a></li>
+                            <li>
+                                <a href="{{ $blogUrl }}?tag={{ urlencode($tag) }}"
+                                   class="{{ ($filters['tag'] ?? '') === $tag ? 'active' : '' }}">
+                                    {{ $tag }}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>

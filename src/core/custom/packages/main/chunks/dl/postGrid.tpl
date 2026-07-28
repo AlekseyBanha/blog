@@ -1,14 +1,14 @@
 <div class="col-lg-6">
   <div class="blog-post">
     <div class="blog-thumb">
-      <img src="[+tv.image+]" alt="[+pagetitle+]">
+      <a href="[+url+]"><img src="[+tv.image+]" alt="[+pagetitle+]"></a>
     </div>
     <div class="down-content">
       <span>[+tv.category+]</span>
       <a href="[+url+]"><h4>[+pagetitle+]</h4></a>
       <ul class="post-info">
-        <li><a href="[+url+]">Admin</a></li>
-        <li><a href="[+url+]">[+date+]</a></li>
+        <li>Екскурсовод</li>
+        <li>[+date+]</li>
       </ul>
       <p>[+introtext+]</p>
       <div class="post-options">

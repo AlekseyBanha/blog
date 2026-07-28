@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ evo()->getConfig('lang', 'en') }}" class="page">
+<html lang="uk" class="page">
 <head>
     <base href="{{ evo()->getConfig('site_url', '/') }}"/>
     <meta charset="UTF-8">
@@ -9,9 +9,10 @@
         {!! implode('', $evtHead) !!}
     @endif
     <title>{{ $doc['pagetitle'] ?? $siteName }} | {{ $siteName }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/fontawesome.css">
-    <link rel="stylesheet" href="/css/templatemo-stand-blog.css">
+    <link rel="stylesheet" href="/css/templatemo-stand-blog.css?v=5">
     <link rel="stylesheet" href="/css/owl.css">
 </head>
 <body>

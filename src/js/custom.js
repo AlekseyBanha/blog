@@ -10,7 +10,7 @@ jQuery( document ).ready(function( $ ) {
             'opacity': '0'
         }, 600, function(){
             setTimeout(function(){
-                $("#preloader").css("visibility", "hidden").fadeOut();
+                $("#preloader").addClass("is-hidden").hide();
             }, 300);
         });
         
