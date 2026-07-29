@@ -13,7 +13,6 @@ services:
       DB_DATABASE: ${DB_DATABASE:-evolution}
       DB_USERNAME: ${DB_USERNAME:-evolution}
       DB_PASSWORD: ${DB_PASSWORD:-evolution_pass}
-      DB_PREFIX: ${DB_PREFIX:-k6on_}
     healthcheck:
       test:
         - CMD

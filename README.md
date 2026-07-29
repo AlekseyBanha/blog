@@ -50,7 +50,6 @@ DB_PORT=3306
 DB_DATABASE=evolution
 DB_USERNAME=evolution
 DB_PASSWORD=evolution_pass
-DB_PREFIX=k6on_
 MYSQL_ROOT_PASSWORD=root_pass
 ```
 
